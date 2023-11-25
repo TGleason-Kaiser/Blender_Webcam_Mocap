@@ -4,18 +4,18 @@ Blender motion capture for humanoid character using mediapipe and opencv. Both s
 ## Usage
 This code has not been tested on Linux and only partially tested on MacOS, problems may occur.
 
-####General Requirements:
+#### General Requirements:
 - Python (only tested on Python 3.8.10)
 - Blender (only teseted on Blender 3.4.0)
 
-####Single Camera Reqiirements:
+#### Single Camera Reqiirements:
 - opencv-python
 - mediapipe
 - numpy
 - matplotlib (maybe)
 - video of a person fully in frame
 
-####Stereo Camera Requirements
+#### Stereo Camera Requirements
 - opencv-python
 - mediapipe
 - numpy
