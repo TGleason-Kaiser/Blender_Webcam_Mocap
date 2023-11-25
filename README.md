@@ -21,7 +21,7 @@ This code has not been tested on Linux and only partially tested on MacOS, probl
 - numpy
 - matplotlib (maybe)
 - glob (maybe)
-- checkerboard calibration pattern (can be generated at [this website]([this](https://www.youtube.com/watch?v=dQw4w9WgXcQ)))
+- checkerboard calibration pattern (can be generated at [this website](https://www.youtube.com/watch?v=dQw4w9WgXcQ))
 - 10 calibration frames for each camera
 - 10 synced calibration frame pairs (different from calibration frames)
 - synced video of person fully in frame from both camera perspectives
