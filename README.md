@@ -25,3 +25,6 @@ This code has not been tested on Linux and only partially tested on MacOS, probl
 - 10 calibration frames for each camera
 - 10 synced calibration frame pairs (different from calibration frames)
 - synced video of person fully in frame from both camera perspectives
+
+## Credits
+Much of the math and code for the stereo camera mocap was from Temuge Batpurev's [github](https://github.com/TemugeB/python_stereo_camera_calibrate) and [blog post](https://temugeb.github.io/opencv/python/2021/02/02/stereo-camera-calibration-and-triangulation.html) on the subject.
