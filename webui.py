@@ -1,11 +1,16 @@
 import streamlit as st
 import cv2
 import subprocess
+import mediapipe as mp
+
+mp_drawing = mp.solutions.drawing_utils
+mp_drawing_styles = mp.solutions.drawing_styles
+mp_pose = mp.solutions.pose
 
 video_data = st.file_uploader("Upload file", ['mp4','mov', 'avi'])
 
-temp_file_to_save = './temp_file_1.mp4'
-temp_file_result  = './temp_file_2.mp4'
+temp_file_to_save = './webui/temp_file_1.mp4'
+temp_file_result  = './webui/temp_file_2.mp4'
 
 # func to save BytesIO on a drive
 def write_bytesio_to_file(filename, bytesio):
@@ -34,13 +39,31 @@ if video_data:
     
     # specify a writer to write a processed video to a disk frame by frame
     fourcc_mp4 = cv2.VideoWriter_fourcc(*'mp4v')
-    out_mp4 = cv2.VideoWriter(temp_file_result, fourcc_mp4, frame_fps, (width, height),isColor = False)
+    out_mp4 = cv2.VideoWriter(temp_file_result, fourcc_mp4, frame_fps, (width, height),isColor = True)
    
-    while True:
-        ret,frame = cap.read()
-        if not ret: break
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) ##<< Generates a grayscale (thus only one 2d-array)
-        out_mp4.write(gray)
+    with mp_pose.Pose(min_detection_confidence=0.5,min_tracking_confidence=0.5) as pose:
+        while cap.isOpened():
+            success, image = cap.read()
+            if not success:
+                break
+
+            # To improve performance, optionally mark the image as not writeable to
+            # pass by reference.
+            image.flags.writeable = False
+            image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+            results = pose.process(image)
+
+            
+            # Draw the pose annotation on the image.
+            image.flags.writeable = True
+            image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR) 
+
+            mp_drawing.draw_landmarks(
+                image,
+                results.pose_landmarks,
+                mp_pose.POSE_CONNECTIONS,
+                landmark_drawing_spec=mp_drawing_styles.get_default_pose_landmarks_style())
+            out_mp4.write(image)
     
     ## Close video files
     out_mp4.release()
@@ -49,7 +72,7 @@ if video_data:
     ## Reencodes video to H264 using ffmpeg
     ##  It calls ffmpeg back in a terminal so it fill fail without ffmpeg installed
     ##  ... and will probably fail in streamlit cloud
-    convertedVideo = "./testh264.mp4"
+    convertedVideo = "./webui/testh264.mp4"
     subprocess.call(args=f"ffmpeg -y -i {temp_file_result} -c:v libx264 {convertedVideo}".split(" "))
     
     ## Show results
@@ -62,9 +85,7 @@ if video_data:
     col2.video(convertedVideo)
 
 '''
-mp_drawing = mp.solutions.drawing_utils
-mp_drawing_styles = mp.solutions.drawing_styles
-mp_pose = mp.solutions.pose
+
 
 def save_uploadedfile(uploadedFile):
     with open(os.path.join("webui",uploadedFile.name),"wb") as f:
