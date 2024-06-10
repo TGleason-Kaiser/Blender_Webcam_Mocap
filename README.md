@@ -1,5 +1,6 @@
 # Blender Webcam Mocap
 Blender motion capture for humanoid character using mediapipe and opencv. Both single and stereo camera options.
+WARNING: Currently this code probably doesn't work, TBH, I stopped working on this project so it might be a good starting place if you want to so something similar, but I wouldn't use this expecting anything to work.
 
 ## Usage
 This code has not been tested on Linux and only partially tested on MacOS, problems may occur.
